@@ -1,21 +1,36 @@
 import * as React from "react"
-import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
+import { PerspectiveCamera, OrbitControls, CubeCamera, Environment } from "@react-three/drei";
 import { Ground } from "./Ground.canvas";
 import Car from "./Car.canvas";
+import Rings from "./Rings.canvas";
+import { Texture } from "three";
+
 
 
 
 
 const CanvasRoot = () => {
+    const renderScene = (texture: Texture) => {
+        return (
+            <>
+                <Environment map={texture} />
+                <Car />
+            </>
+        );
+    };
     return (
         <React.Fragment>
             <OrbitControls target={[0, 0.35, 0]} maxPolarAngle={1.45} />
             <PerspectiveCamera castShadow fov={50} position={[3, 2, 5,]} makeDefault />
             {/* let color = new Color(0,0,0) */}
-            <color args={[1, 1, 1]} attach={"background"} />
-
-            {/* Car Model here */}
-            <Car />
+            <color args={[0, 0, 0]} attach={"background"} />
+            <CubeCamera
+                resolution={256}
+                frames={Infinity}
+                children={((texture: Texture) => renderScene(texture)) as (React.ReactNode & ((tex: Texture) => React.ReactNode))}
+            />
+            {/* Rings Model here */}
+            <Rings />
             {/* SpotLight to projection the light at specific location */}
             <spotLight
                 color={[1, 0.25, 0.7]}
