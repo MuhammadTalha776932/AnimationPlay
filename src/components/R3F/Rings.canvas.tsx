@@ -1,16 +1,19 @@
 
-import { useFrame } from '@react-three/fiber';
+import { RootState, useFrame } from '@react-three/fiber';
 import * as React from 'react'
 import { BufferGeometry, Color, Material, Mesh, MeshStandardMaterial } from 'three';
 
 const Rings = () => {
     const meshRef = React.useRef<Mesh<BufferGeometry, Material | Material[]>[]>([]);
 
-    useFrame(() => {
+    useFrame((state: RootState) => {
+
+        let elapsed = state.clock.getElapsedTime();
         for (let index: number = 0; index < meshRef.current.length; index++) {
             let mesh = meshRef.current[index];
 
-            let z = (index - 7) * 3.5;
+            // * let z = (index - 7) * 3.5;
+            let z = (index - 7) * 3.5 + ((elapsed * 0.4) % 3.5) * 2;
 
             mesh.position.set(0, 0, -z); // * Here we set the position of each rings by z 
 
@@ -36,7 +39,7 @@ const Rings = () => {
     return (
         <>
             {
-                [...Array(14)].map((_: number, index: number) => (
+                [...Array(14)].map((_, index: number) => (
 
                     <mesh
                         castShadow
