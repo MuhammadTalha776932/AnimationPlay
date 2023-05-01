@@ -20,7 +20,7 @@ const Box = ({ color }: IBox): JSX.Element => {
         return vectorThree;
     }
     const resetPosition = () => {
-        let vectorThree = new Vector3((Math.random() * 2 - 1) * 2.0, (Math.random() * 2.5) + 0.9, (Math.random() * 10 + 10));
+        let vectorThree = new Vector3((Math.random() * 2 - 1) * 2.0, (Math.random() * 2.5) + 0.9, (Math.random() * 2 + 10));
         if (vectorThree.x < 0) vectorThree.x -= 1.75;
         if (vectorThree.x > 0) vectorThree.x += 1.75;
         setBoxPosition(vectorThree);
