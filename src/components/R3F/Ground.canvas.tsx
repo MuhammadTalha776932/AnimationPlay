@@ -1,6 +1,6 @@
 import * as React from "react"
 import { MeshReflectorMaterial } from "@react-three/drei"
-import { useLoader } from "@react-three/fiber"
+import { RootState, useFrame, useLoader } from "@react-three/fiber"
 import { LinearEncoding, RepeatWrapping, Texture, TextureLoader } from "three"
 
 export const Ground = () => {
@@ -19,9 +19,21 @@ export const Ground = () => {
         normal.encoding = LinearEncoding;
     }, [normal, roughness])
 
+
+    // * Here we change the texture offset according to the clock by 0.128 factor each seconds
+    useFrame((state: RootState, _delta: number) => {
+        let t = -state.clock.getElapsedTime() * 0.128;
+        (roughness as Texture).offset.set(0, t);
+        (normal as Texture).offset.set(0, t);
+    })
+
     return (
-        <mesh rotation-x={-Math.PI * 0.5} castShadow receiveShadow>
-            <planeGeometry args={[30, 30]} />
+        <mesh
+            // rotation-x={-Math.PI * 0.5} 
+            rotation={[(-Math.PI * 0.5), 0, 0]}
+            castShadow
+            receiveShadow >
+            <planeGeometry args={[300, 300]} />
             <MeshReflectorMaterial
                 envMapIntensity={0}
                 normalMap={normal}
@@ -41,6 +53,6 @@ export const Ground = () => {
                 depthToBlurRatioBias={0.25}
                 reflectorOffset={0.2}
             />
-        </mesh>
+        </mesh >
     )
 }
